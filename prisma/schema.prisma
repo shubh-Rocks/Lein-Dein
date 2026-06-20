@@ -13,8 +13,111 @@ datasource db {
 }
 
 model User{
- id  Int  @default(autoincrement())
- name String 
- email String @unique
+ id           Int        @id @default(autoincrement())
+ name         String 
+ email        String     @unique
+ phone        String?       @unique
+ password     String 
+ image        String? 
+ emailVerified DateTime? 
+
+ borrowers  Borrower[]
+ loans      Loan[]
+ payments   Payment[]
+ auditLogs  AuditLogs[]
+
+ createdAt  DateTime @default(now())
+ updatedAt  DateTime @updatedAt
+
+ @@map("users")
+}
+
+model Borrower{
+  id          Int              @id @default(autoincrement())
+  userId      Int
+  name        String
+  phone       String           @unique
+  email       String           @unique
+  notes       String?
+  address     String?
+
+  user        User             @relation(fields: [userId], references: [id],onDelete: Cascade)
+  loans       Loan[] 
+
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@unique([userId,phone])
+  @@map ("borrowers")  
+
+}
+
+model Loan{
+  id             Int           @id @default(autoincrement())
+  userId         Int            
+  borrowerId     Int        
+
+  amount         Decimal       @db.Decimal(15,2)
+  interestRate   Decimal       @default(0) @db.Decimal(5,2)
+  interestType   String        @default("simple")
+
+  lentDate       DateTime      
+  dueDate        DateTime
+
+  status         LoanStatus    @default(ACTIVE)
+  notes          String?
+  isDeleted      Boolean
+  user           User          @relation(fields: [userId] , references: [id],onDelete: Cascade ) 
+  borrower      Borrower       @relation(fields: [borrowerId],references: [id],onDelete: Restrict)
+
+  payments      Payment[]
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@map("loans")
+}
+
+
+model AuditLogs{
+  id           Int         @id @default(autoincrement())
+  userId       Int
+  entityType   String
+  entityId     Int
+  action       String
+  oldValues    Json?
+  newValues    Json?
+  
+  user         User        @relation(fields: [userId],references: [id])
+  createdAt    DateTime    @default(now())
+  
+  @@map("audit_logs")
+}
+model Payment{
+  id               Int        @id @default(autoincrement())
+  loanId           Int
+  userId           Int
+
+  amount           Decimal    @db.Decimal(15,2)
+  paymentDate      DateTime
+  PaymentMethods   String     @default("cash")
+  notes            String?
+ 
+  user              User       @relation(fields:[userId],references: [id],onDelete: Cascade)
+  loan              Loan       @relation(fields: [loanId],references: [id],onDelete: Cascade)
+
+  createdAt         DateTime   @default(now())
+
+  @@map("payments")
+
+}
+
+enum LoanStatus{
+  ACTIVE
+  Partially_PAID
+  PAID
+  OVERDUE
+  CANCELLED
 }
 
