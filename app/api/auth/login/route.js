@@ -32,7 +32,7 @@ export async function POST(request) {
       );
     }
 
-    const token = generateToken(userFromDb.id);
+    const token = await generateToken(userFromDb);
 
     const response = NextResponse.json({
       user: {
