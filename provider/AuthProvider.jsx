@@ -1,0 +1,90 @@
+"use client";
+
+import { apiCLient } from "@/lib/api.Client";
+import { loginSchema } from "@/lib/validations";
+import { useRouter } from "next/navigation";
+import {
+  createContext,
+  useActionState,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
+const AuthContext = createContext(undefined);
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userData = await apiCLient.getCurrentUser();
+        setUser(userData || null);
+      } catch (error) {
+        console.error("user not found", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadUser();
+  }, []);
+
+  const [loginState, logingAction, isLoginPending] = useActionState(
+    async (prevState, formData) => {
+      const email = formData.get("email");
+      const password = formData.get("password");
+      const validatedfields = loginSchema.safeParse({ email, password });
+      if (!validatedfields.success) {
+        return {
+          error: "form validation error",
+          fieldErrors: validatedfields.error.flatten().fieldErrors,
+        };
+      }
+
+      try {
+        const data = await apiCLient.login(email, password);
+        setUser(data.user);
+        router.push("/dashboard");
+        return { success: true, user: data.user };
+      } catch (error) {
+        return { error: "login failed. please try again" };
+      }
+    },
+    { error: "", success: undefined, user: undefined },
+  );
+
+  const logout = async () => {
+    try {
+      await apiCLient.logout();
+      setUser(null);
+      router.push("/login");
+    } catch (error) {
+      console.error("logout error:", error);
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        login: logingAction,
+        logout,
+        loginState,
+        isLoginPending,
+        isLoading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new error("useAuth must be used within an AuthProvider");
+  }
+};
