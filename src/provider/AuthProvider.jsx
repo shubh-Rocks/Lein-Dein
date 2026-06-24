@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
         router.push("/dashboard");
         return { success: true, user: data.user };
       } catch (error) {
-        return { error: "login failed. please try again" };
+        return { error: "Invalid Credentials. please try again" };
       }
     },
     { error: "", success: undefined, user: undefined },
@@ -87,4 +87,5 @@ export const useAuth = () => {
   if (context === undefined) {
     throw new error("useAuth must be used within an AuthProvider");
   }
+  return context;
 };
