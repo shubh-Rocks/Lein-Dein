@@ -24,7 +24,7 @@ const Navbar = () => {
         <Link href="/about us">About Us</Link>
         <Link href="/help">Help</Link>
       </div>
-      <div className="flex gap-3 mr-10">
+      <div className="flex gap-5 mr-10">
         <Login />
         <GetStarted />
       </div>
