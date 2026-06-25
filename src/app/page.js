@@ -1,3 +1,9 @@
+import Navbar from "@/components/layout/Navbar";
+
 export default function () {
-  return <div className="bg-amber-600 w-4xl h-14"></div>;
+  return (
+    <div className="bg-[#FAF7EF] min-h-screen">
+      <Navbar />
+    </div>
+  );
 }

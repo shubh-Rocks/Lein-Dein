@@ -13,12 +13,12 @@ datasource db {
 }
 
 model User{
- id           Int        @id @default(autoincrement())
- name         String 
- email        String     @unique
- phone        String?       @unique
- password     String 
- image        String? 
+ id            Int           @id @default(autoincrement())
+ name          String 
+ email         String        @unique
+ phone         String?       @unique
+ password      String 
+ image         String? 
  emailVerified DateTime? 
 
  borrowers  Borrower[]
