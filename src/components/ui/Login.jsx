@@ -6,7 +6,7 @@ const LoginButton = () => {
     <div>
       <Link
         href="/login" // 2. Yahan apne login page ka route dein
-        className="px-8 py-3 text-lg font-bold text-[#142D23] bg-transparent border-2 border-[#D3CDBE] rounded-xl hover:bg-[#D3CDBE]/20 transition-colors"
+        className="px-4 py-2 text-sm font-semibold text-[#142D23] bg-transparent border-[1px] border-[#D3CDBE] rounded-[10px] pointer-cursor hover:bg-[#D3CDBE]/20 transition-colors"
       >
         Login
       </Link>
