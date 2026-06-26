@@ -50,7 +50,7 @@ const PreviewRecordBox = () => {
                 </div>
                 <div>
                   <p className="font-bold text-[#0B2536] text-[15px]">
-                    Ramesh Kirana
+                    Ramesh Logistics
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">
                     Last paid: 3 days ago
