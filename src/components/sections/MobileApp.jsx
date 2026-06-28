@@ -34,7 +34,7 @@ const MobileApp = () => {
         <div>
           <div className="flex justify-between px-3.5 py-3">
             <span className="text-sm font-semibold">9:47</span>
-            <span>●●● 4G </span>
+            <span>●●● 5G </span>
           </div>
 
           <div className="flex flex-col p-3">

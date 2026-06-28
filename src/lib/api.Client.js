@@ -41,7 +41,7 @@ class ApiClient {
   async login(email, password) {
     return this.request("/api/auth/login", {
       method: "POST",
-      body: JSON.stringify({email, password}),
+      body: JSON.stringify({ email, password }),
     });
   }
 
@@ -53,6 +53,10 @@ class ApiClient {
 
   async getCurrentUser() {
     return this.request("/api/auth/me");
+  }
+
+  async sendRemineder() {
+    return this.request("api/send-reminder", { method: "POST" });
   }
 }
 
