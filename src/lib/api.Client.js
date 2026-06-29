@@ -1,3 +1,5 @@
+import { PUT } from "@/app/api/user/profile/route";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 class ApiClient {
@@ -55,8 +57,8 @@ class ApiClient {
     return this.request("/api/auth/me");
   }
 
-  async sendRemineder() {
-    return this.request("api/send-reminder", { method: "POST" });
+  async updatedUser(){
+    return this.request("/api/user/profile",{method:PUT})
   }
 }
 

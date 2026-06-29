@@ -66,6 +66,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateLocalUser = (updatedUserData) => {
+    setUser(updatedUserData);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -75,6 +79,7 @@ export const AuthProvider = ({ children }) => {
         loginState,
         isLoginPending,
         isLoading,
+        updateLocalUser
       }}
     >
       {children}

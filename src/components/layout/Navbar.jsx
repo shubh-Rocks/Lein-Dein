@@ -4,8 +4,27 @@ import Image from "next/image";
 import Login from "../ui/Login";
 import GetStarted from "../ui/GetStarted";
 import Link from "next/link";
+import { useAuth } from "@/provider/AuthProvider";
+import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
+  const { user, isLoading, logout } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(null);
+  const isDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickedOutside = (event) => {
+      if (
+        isDropdownRef.current &&
+        !isDropdownRef.current.contains(event.target)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickedOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickedOutside);
+  }, []);
   return (
     <div className="bg-[#FAF7EF] font-semibold w-full px-8 py-4 border border-[#0e3b53]/20 flex items-center justify-between ">
       <div className="flex gap-3 items-center">
@@ -20,13 +39,67 @@ const Navbar = () => {
       </div>
       <div className="flex gap-5">
         <Link href="/home">Home</Link>
-        <Link href="/dashboard">Dashboard</Link>
-        <Link href="/about us">About Us</Link>
+        <Link href="/about">About</Link>
+        <Link href="/contact">Contacts</Link>
         <Link href="/help">Help</Link>
       </div>
+
       <div className="flex gap-5 mr-10">
-        <Login />
-        <GetStarted />
+        {isLoading ? (
+          <div className="w-4 h-4 rounded-full border-2 border-t-cynan animate-spin"></div>
+        ) : !user ? (
+          <div className="flex gap-5 mr-10">
+            <Login />
+            <GetStarted />
+          </div>
+        ) : (
+          // LOGGED IN
+          <div className="relative" ref={isDropdownRef}>
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="flex items-center gap-2 focus:outline-none"
+            >
+              <img
+                src={
+                  user.avatar ||
+                  `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`
+                }
+                alt="Profile"
+                className="w-10 h-10 rounded-full border border-white/20 hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-all object-cover"
+              />
+            </button>
+
+            {/* Dropdown Menu */}
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-3 w-56 rounded-xl bg-gray-900/90 backdrop-blur-xl border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.5)] overflow-hidden">
+                <div className="px-4 py-3 border-b border-white/10">
+                  <p className="text-sm text-white font-medium truncate">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                </div>
+
+                <Link
+                  href="/profile"
+                  onClick={() => setIsDropdownOpen(false)}
+                  className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-cyan-400 transition-colors"
+                >
+                  Edit Profile
+                </Link>
+
+                <button
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                    logout();
+                  }}
+                  className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
