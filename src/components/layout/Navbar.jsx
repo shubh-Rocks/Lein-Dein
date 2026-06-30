@@ -6,6 +6,7 @@ import GetStarted from "../ui/GetStarted";
 import Link from "next/link";
 import { useAuth } from "@/provider/AuthProvider";
 import { useEffect, useRef, useState } from "react";
+import CustomAvatar from "../dashboard/CustomAvatar";
 
 const Navbar = () => {
   const { user, isLoading, logout } = useAuth();
@@ -59,14 +60,18 @@ const Navbar = () => {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="flex items-center gap-2 focus:outline-none"
             >
-              <img
-                src={
-                  user.avatar ||
-                  `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`
-                }
-                alt="Profile"
-                className="w-10 h-10 rounded-full border border-white/20 hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-all object-cover"
-              />
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full border border-white/20 hover:border-cyan-400 hover:shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-all object-cover"
+                />
+              ) : (
+                <CustomAvatar
+                  name={user.name}
+                  className="w-10 h-10 hover:border-cyan-400 transition-all hover:shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                />
+              )}
             </button>
 
             {/* Dropdown Menu */}

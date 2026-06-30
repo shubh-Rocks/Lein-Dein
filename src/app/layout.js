@@ -1,6 +1,7 @@
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/provider/AuthProvider";
+import Navbar from "@/components/layout/Navbar";
 
 export const metadata = {
   title: "lein-dein",
@@ -11,7 +12,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
