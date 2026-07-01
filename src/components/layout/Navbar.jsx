@@ -27,8 +27,8 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickedOutside);
   }, []);
   return (
-    <div className="bg-white backdrop:blur-3xl font-semibold w-full px-8 py-4 border border-[#0e3b53]/20 flex items-center justify-between rounded-b-3xl sticky top-0 z-50">
-      <div className="flex gap-3 items-center">
+    <div className="bg-white backdrop:blur-3xl font-semibold px-8 py-4 border border-[#0e3b53]/20 flex items-center justify-between rounded-b-3xl sticky top-0 z-50">
+      <div className="flex gap-3">
         <Image
           src="/logo.svg"
           width={50}
