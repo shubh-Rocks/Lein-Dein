@@ -1,5 +1,3 @@
-import Navbar from "@/components/layout/Navbar";
-
 export default function () {
-  <Navbar />;
+  return <div className=" bg-[#f6f8fa] min-h-screen "></div>;
 }
